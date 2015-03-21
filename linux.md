@@ -1,3 +1,9 @@
+## Table of contents
+
+[TOC]
+
+****************************************
+
 ### Kernel compilation
 
 > necessary packages : build-essential libncurses5-dev
@@ -47,7 +53,6 @@ Virtual interface
     dns-nameservers 4.2.2.1 8.8.8.8 8.8.4.4
 
 ### RAID logiciel
- 
 
     mdadm --create --verbose /dev/md0 --level=0 --chunk=128 --raid-devices=3 /dev/sd[bcd]1
     mdadm --detail --scan --verbose >> /etc/mdadm/mdadm.conf
@@ -65,7 +70,12 @@ Virtual interface
 #### LUKS
 
     cryptsetup luksFormat -c aes-xts-plain64 -h sha1 -s 256 -y /dev/sdb1
-    cryptsetup luksOpen /dev/sdb1 /home/topkekvolume
+    cryptsetup luksOpen /dev/sdb1 topkekvolume
+    mount /dev/mapper/topkekvolume /home/topkekvolume
+
+### mount
+    mount --bind /home/topkekvolume /home/topkekvolume2
+     mount /dev/mapper/topkekvolume -t ext4 /home/topkekvolume -o noatime,data=writeback
     
 ### 2tb+ partition
 
@@ -103,3 +113,53 @@ Virtual interface
 ### SSHfs
     usermod -G fuse -a root
     sshfs supergooduser@dasanbox:/volume1/site /home/bigvolumebro -p 2222 -o allow_other,reconnect
+    
+### iptables
+    iptables -t table -vnL
+    iptables -t nat -L -n -v
+    iptables -I INPUT 5 -p igmp -s 192.168.1.1 -d 224.0.0.1 -j ACCEPT
+    iptables -I INPUT 2 -p udp -s 10.59.0.1 -d 255.255.255.255 -j ACCEPT
+    iptables -I INPUT -m state --state NEW -p tcp -s 192.168.1.0/24 -d 192.168.1.0/24 --dport 16851 -j ACCEPT
+    iptables -A INPUT -p tcp --dport 40000:42000 -m iprange --src-range 63.0.0.0-76.255.255.255 -j DROP
+    iptables -A INPUT -p tcp -m iprange --src-range 63.0.0.0-76.255.255.255 -j DROP
+    iptables -A OUTPUT -p tcp --sport 40000:42000 -m iprange --dst-range 63.0.0.0-76.255.255.255 -j DROP
+    iptables -A INPUT -p tcp --src 50.19.140.254 -j DROP
+    iptables -A OUTPUT -p tcp --dst 50.19.140.254 -j DROP
+
+### SELinux
+    sestatus
+    nano /etc/sysconfig/selinux
+    
+### systemd
+    systemctl list-unit-files
+    systemctl disable servicename
+    systemctl reload servicename
+    systemctl start servicename
+
+### NetworkManager
+    systemctl stop NetworkManager
+    systemctl disable NetworkManager
+
+### firewalld
+    systemctl stop firewalld
+    systemctl disable firewalld
+    
+### dpkg
+    dpkg -l|grep datpkg
+    dpkg -L datpkg
+    dpkg -i file.deb
+    
+### rpm
+    rpm -qa|datpkg
+    rpm -qi datpkg
+    
+### APT
+    apt search datpkg
+    apt-mark hold datpkg
+    apt-cache showpkg datpkg
+    apt-get build-dep pakage
+    apt-get -b source package
+
+### YUM
+    yum repolist
+    yum search datpkg
