@@ -67,3 +67,39 @@ Virtual interface
     cryptsetup luksFormat -c aes-xts-plain64 -h sha1 -s 256 -y /dev/sdb1
     cryptsetup luksOpen /dev/sdb1 /home/topkekvolume
     
+### 2tb+ partition
+
+#### Non optimal
+    parted /dev/sdx
+    mklabel gpt
+    mkpart primary ext4 0 6000GB
+    
+#### Optimal alignment
+    parted -a optimal /dev/sdc mklabel gpt
+    parted -a optimal /dev/sdc mkpart primary 0% 100%
+    
+### HDD benchmark
+    dd if=/dev/zero of=/home/gl/site/incoming/speed bs=4096k count=1024k
+    dd if=/dev/zero of=test bs=4096k oflag=direct
+    hdparm -tT /dev/sda
+    
+### OpenSSL
+    ./config --prefix=/topsecureapp/lel --openssldir=/topsecureapp/lel/openssl
+    ./config zlib --prefix=/topsecureapp/lel --openssldir=/topsecureapp/lel/openssl
+    make && make test && make install
+    
+#### RSA
+    openssl genrsa -out maclef.key 1024
+    openssl req -new -x509 -days 900 -key maclef.key -out moncertif.crt
+    cat maclef.key moncertif.crt > finalcrt.pem
+
+#### DSA
+    openssl dsaparam -rand temp -out temp.dsaparam 1024
+    openssl dhparam -rand temp -out temp.dh 1024
+    openssl gendsa -aes128 -out maclef.key temp.dsaparam
+    openssl req -new -x509 -days 900 -key maclef.key -out moncertif.crt
+    cat maclef.key moncertif.crt temp.dh > finalcrt.pem
+    
+### SSHfs
+    usermod -G fuse -a root
+    sshfs supergooduser@dasanbox:/volume1/site /home/bigvolumebro -p 2222 -o allow_other,reconnect
