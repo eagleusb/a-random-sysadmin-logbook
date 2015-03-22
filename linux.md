@@ -42,7 +42,7 @@
         # dns-* options are implemented by the resolvconf package, if installed
         dns-nameservers 88.117.198.200 88.117.237.100 88.117.196.200
 
-Virtual interface
+#### Virtual interface
     iface eth1:0 inet static
     address 200.21.23.155
     netmask 255.255.255.0
@@ -148,13 +148,13 @@ Virtual interface
     rpm -qa|datpkg
     rpm -qi datpkg
     
-### APT
+### apt
     apt search datpkg
     apt-mark hold datpkg
     apt-cache showpkg datpkg
     apt-get build-dep pakage
     apt-get -b source package
 
-### YUM
+### yum
     yum repolist
     yum search datpkg

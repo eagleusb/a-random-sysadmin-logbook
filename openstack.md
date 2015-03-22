@@ -17,7 +17,7 @@
     openstack-nova-api-2014.2.1-1.el7.centos.noarch
 
 ### Glance API
-    glance image-lis
+    glance image-list
     glance image-delete bubuntu
     glance image-create --copy-from http://uec-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img --is-public True --disk-format qcow2 --container-format bare --name bubuntu
     glance -k image-create --name IMPORT-BACKUP-TOPKEKVM --disk-format qcow2 --container-format bare --file b6d9e297-e77b-4c78-a667-b780b926b97b
@@ -40,5 +40,11 @@
     virsh version
 
 ### Under the hood of Glance node
-
     ls -lcth /images/
+    qemu-img info /images/uuid
+
+### Under the hood of metadata & cloud-init
+    ip a|grep -i 169.254.169.254
+    iptables -t nat -L -n|grep -i 169.254.169.254
+    curl http://169.254.169.254
+    tcpdump -n -i any host dst 169.254.169.254 and tcp port 80
