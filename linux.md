@@ -22,6 +22,12 @@
     chmod 700 .ssh
     chmod 600 authorized_keys
 
+### SSH
+    ssh-keygen -f "/home/bobby/.ssh/known_hosts" -R 8.8.8.8
+    ssh -n -o "StrictHostKeyChecking no" -o "LogLevel QUIET" bobby@8.8.8.8 'service apache2 status' 2>&1
+#### Keychain
+    eval `keychain --eval ~/Documents/SSH-Keys/secure-bobby`
+    
 ### MAJ les libs
     ldconfig
 
@@ -158,3 +164,7 @@
 ### yum
     yum repolist
     yum search datpkg
+    
+### Ansible
+    ansible-playbook -C -i hosts -v playbook/site.yml
+    ansible all -i hosts -v -u root -m shell -a 'apt-get update && apt-get -y install openssl'

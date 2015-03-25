@@ -48,3 +48,6 @@
     iptables -t nat -L -n|grep -i 169.254.169.254
     curl http://169.254.169.254
     tcpdump -n -i any host dst 169.254.169.254 and tcp port 80
+    iptables -t nat -A PREROUTING -d 169.254.169.254 -p tcp -m tcp --dport 80 -j DNAT --to-destination NOVA-NET-IP:8775[1]
+    
+[1]:https://github.com/openstack/nova/blob/52877cddaa1612aad24f525c55cfc03c10450360/nova/network/linux_net.py
