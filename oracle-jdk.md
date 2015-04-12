@@ -4,5 +4,9 @@
 
 ****************************************
 
-### Oracle JDK deployment
+### Oracle JDK
+#### Configuration print
     java -XX:+PrintFlagsFinal -version
+
+#### Interesting options
+    

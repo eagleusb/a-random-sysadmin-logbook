@@ -66,7 +66,6 @@
 
 ### Cryptsetup
 #### Plain mode
-
     cryptsetup create plainvolume -c aes-ecb-plain -s 128 /dev/md0
 
 #### LUKS
@@ -113,7 +112,7 @@
     
 ### SSHfs
     usermod -G fuse -a root
-    sshfs supergooduser@dasanbox:/volume1/site /home/bigvolumebro -p 2222 -o allow_other,reconnect
+    sshfs supergooduser@dasanbox:/volume1/site /home/bigvolumebro -p 2222 -C -o allow_other,reconnect,[SSH options]
     
 ### iptables
     iptables -t table -vnL
@@ -168,3 +167,8 @@
 ### Ansible
     ansible-playbook -C -i hosts -v playbook/site.yml
     ansible all -i hosts -v -u root -m shell -a 'apt-get update && apt-get -y install openssl'
+    
+### Update alternatives
+    update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk1.8.0_33/bin/javac 1
+    update-alternatives --remove-all javac
+    update-alternatives --display javac

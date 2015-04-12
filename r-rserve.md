@@ -22,6 +22,7 @@
     installed.packages()
 
 ### R addons
+    http://mirror.ibcp.fr/pub/CRAN/src/contrib/reshape2_1.4.1.tar.gz
 
 ### Rserve
     wget http://www.rforge.net/src/contrib/Rserve_1.8-1.tar.gz

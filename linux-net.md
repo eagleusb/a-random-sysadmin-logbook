@@ -20,15 +20,15 @@
 
 ### RP filter
     sysctl -w "net.ipv4.conf.all.rp_filter=1"
-    [Cisco Press Reverse Path Filtering][1]
+    [Cisco Press Reverse Path Filtering]
     
-[1]:http://www.ciscopress.com/articles/article.asp?p=1725270
+[Cisco Press Reverse Path Filtering]:http://www.ciscopress.com/articles/article.asp?p=1725270
 ### ICMP redirects
     sysctl -w net.ipv4.conf.all.accept_redirects=0
     sysctl -w net.ipv6.conf.all.accept_redirects=0
-    [Cisco Press][2]
+    [Cisco Press ICMP redirects]
     
-[2]:http://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13714-43.html
+[Cisco Press ICMP redirects]:http://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13714-43.html
 ### sysctl
 
 ### ethtool
@@ -71,9 +71,9 @@
     ip route add default via 147.210.6.254 dev eth0.100 table VLAN100
     ip route flush cache
     
-[See more][3]
+[See more]
 
-[3]:http://lartc.org/howto/
+[See more]:http://lartc.org/howto/
 ### routing
     route add 192.168.200.151 dev vmbr0
     ip address show
