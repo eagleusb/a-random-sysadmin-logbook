@@ -17,7 +17,6 @@
 
 [1]: http://debian-handbook.info/browse/fr-FR/stable/sect.kernel-compilation.html
 
-
 ### SSHd Auth
     chmod 700 .ssh
     chmod 600 authorized_keys

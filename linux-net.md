@@ -20,15 +20,15 @@
 
 ### RP filter
     sysctl -w "net.ipv4.conf.all.rp_filter=1"
-    [Cisco Press Reverse Path Filtering]
     
 [Cisco Press Reverse Path Filtering]:http://www.ciscopress.com/articles/article.asp?p=1725270
+
 ### ICMP redirects
     sysctl -w net.ipv4.conf.all.accept_redirects=0
     sysctl -w net.ipv6.conf.all.accept_redirects=0
-    [Cisco Press ICMP redirects]
-    
+
 [Cisco Press ICMP redirects]:http://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13714-43.html
+
 ### sysctl
 
 ### ethtool
@@ -45,6 +45,7 @@
             bond_miimon 100
             
     cat /proc/net/bonding/bond0
+
 ### bridge
     auto vmbr100
     iface vmbr100 inet static
@@ -55,6 +56,7 @@
             bridge_ports bond0
             bridge_stp off
             bridge_fd 0
+
 ### vlan & routing multiple interfaces
     echo 8021q >> /etc/modules
     modprobe 8021q
@@ -70,10 +72,9 @@
     ip route add 147.210.6.0/24 dev eth0.100 table VLAN100
     ip route add default via 147.210.6.254 dev eth0.100 table VLAN100
     ip route flush cache
-    
-[See more]
 
 [See more]:http://lartc.org/howto/
+
 ### routing
     route add 192.168.200.151 dev vmbr0
     ip address show
