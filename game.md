@@ -23,12 +23,12 @@
     -usercon Enables RCON for CS:GO Servers
 [See More](https://developer.valvesoftware.com/wiki/Command_Line_Options#Source_Dedicated_Server)
 ##### game_mode and game_type
-    | Mode                | game_mode | game_type |
-    |---------------------|-----------|-----------|
-    | Classic Casual      |     0     |     0     |
-    | Classic Competitive |     0     |     1     |
-    | Arms Race           |     1     |     0     |
-    | Demolition          |     1     |     1     |
+| Mode                | game_mode | game_type |
+|---------------------|-----------|-----------|
+| Classic Casual      |     0     |     0     |
+| Classic Competitive |     0     |     1     |
+| Arms Race           |     1     |     0     |
+| Demolition          |     1     |     1     |
 #### server.cfg
     hostname "Counter-Strike: Global Offensive Dedicated Server"
     rcon_password "yourrconpassword"
