@@ -21,12 +21,14 @@
     chown etherpad:etherpad etherpad-lite -R
     sudo -u etherpad etherpad-lite/bin/run.sh 
 ### ARMv6/RaspberryPi  
-    wget https://iojs.org/dist/v1.6.4/iojs-v1.6.4-linux-armv6l.tar.gz
-    sudo update-alternatives --install /usr/bin/node node /mnt/usbdrive01/opt/iojs-v1.6.4-linux-armv6l/bin/node 1
-    sudo update-alternatives --install /usr/bin/npm npm /mnt/usbdrive01/opt/iojs-v1.6.4-linux-armv6l/bin/npm 1
-    sudo update-alternatives --install /usr/bin/iojs iojs /mnt/usbdrive01/opt/iojs-v1.6.4-linux-armv6l/bin/iojs 1
+    wget http://node-arm.herokuapp.com/node_latest_armhf.deb
+    dpkg -i node_latest_armhf.deb
+    git clone git://github.com/ether/etherpad-lite.git
     useradd -c "etherpad env user" -m -s /bin/false etherpad
-    sudo -u etherpad etherpad-lite/bin/run.sh
+    chown etherpad:etherpad etherpad-lite -R
+    git checkout 1.5.6
+    sudo npm install sqlite3
+    screen -dS etherpad "sudo -u etherpad etherpad-lite/bin/run.sh"
     
     
 [See More](https://github.com/ether/etherpad-lite#gnulinux-and-other-unix-like-systems)

@@ -5,8 +5,17 @@
 ****************************************
 
 ### tcpdump
-
+    tcpdump -i any tcp port 80
+    tcpdump -n -i any src net 1.1.2.0/24
+    tcpdump -i any host 1.2.1.2
+    tcpdump -i any -n host 8.8.8.8 and tcp port 80
+    
 ### iptables SNAT/DNAT
+    
+### iptables IPv4 NAT
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+    iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+    iptables -t nat -L -n -v
 
 ### ip forwarding
     echo 1 > /proc/sys/net/ipv4/ip_forward
