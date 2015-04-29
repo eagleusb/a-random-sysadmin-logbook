@@ -1,6 +1,19 @@
 ## Table of contents
-
-[TOC]
+<!-- TOC depth:6 withLinks:1 updateOnSave:1 -->
+	- [Table of contents](#table-of-contents)
+		- [PackStack packages](#packstack-packages)
+		- [Glance API](#glance-api)
+		- [Nova API](#nova-api)
+		- [Keystone](#keystone)
+			- [Create typical service](#create-typical-service)
+		- [Under the hood of Nova Compute node](#under-the-hood-of-nova-compute-node)
+		- [Under the hood of Cinder node](#under-the-hood-of-cinder-node)
+		- [Under the hood of Glance node](#under-the-hood-of-glance-node)
+		- [Under the hood of metadata & cloud-init](#under-the-hood-of-metadata-cloud-init)
+		- [Schemas](#schemas)
+			- [Network diagrams](#network-diagrams)
+			- [Block Storage Architecture](#block-storage-architecture)
+<!-- /TOC -->
 
 ****************************************
 
@@ -63,10 +76,27 @@
 
 ### Schemas
 #### Network diagrams
+Tenants network overview
+
 ![Tenants network overview](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux_OpenStack_Platform/6/html-single/Deploying_OpenStack_Learning_Environments/images/4971.png)
+
+Neutron deployment architecture
+
 ![Neutron deployment architecture](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux_OpenStack_Platform/6/html-single/Deploying_OpenStack_Learning_Environments/images/2476.png)
+
+Neutron topology example
+
 ![Neutron topology example](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux_OpenStack_Platform/6/html-single/Deploying_OpenStack_Learning_Environments/images/5113.png)
+
+VXVLAN/GRE L2 tunneling
+
 ![VXVLAN/GRE L2 tunneling](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux_OpenStack_Platform/6/html-single/Deploying_OpenStack_Learning_Environments/images/4780.png)
+
+VMWare NSX topology overview
+
 ![VMWare NSX topology overview](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux_OpenStack_Platform/6/html-single/Deploying_OpenStack_Learning_Environments/images/5194.png)
 #### Block Storage Architecture
+
+Block storage aka Cinder
+
 ![Block storage aka Cinder](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux_OpenStack_Platform/6/html-single/Deploying_OpenStack_Learning_Environments/images/2638.png)
