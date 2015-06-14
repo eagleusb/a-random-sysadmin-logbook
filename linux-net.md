@@ -1,48 +1,60 @@
-## Table of contents
-
-[TOC]
-
+<!-- TOC depth:6 withLinks:1 updateOnSave:1 -->
+- [tcpdump](#tcpdump)
+- [iptables](#iptables)
+	- [SNAT/DNAT](#snatdnat)
+	- [IPv4 NAT](#ipv4-nat)
+- [IP forwarding](#ip-forwarding)
+- [ARP Proxy](#arp-proxy)
+- [RP filter](#rp-filter)
+- [ICMP redirects](#icmp-redirects)
+- [sysctl](#sysctl)
+- [ethtool](#ethtool)
+- [bonding](#bonding)
+- [bridge](#bridge)
+- [vlan & routing multiple interfaces](#vlan-routing-multiple-interfaces)
+- [routing](#routing)
+<!-- /TOC -->
 ****************************************
-
-### tcpdump
+# tcpdump
     tcpdump -i any tcp port 80
     tcpdump -n -i any src net 1.1.2.0/24
     tcpdump -i any host 1.2.1.2
     tcpdump -i any -n host 8.8.8.8 and tcp port 80
-    
-### iptables SNAT/DNAT
-    
-### iptables IPv4 NAT
+
+# iptables
+##SNAT/DNAT
+
+## IPv4 NAT
     echo 1 > /proc/sys/net/ipv4/ip_forward
     iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
     iptables -t nat -L -n -v
 
-### ip forwarding
+# IP forwarding
     echo 1 > /proc/sys/net/ipv4/ip_forward
     sysctl –w net.ipv4.ip_forward=1
     sysctl –w net.ipv6.conf.all.forwarding=1
-    
-#### ARP Proxy
+
+# ARP Proxy
     echo 1 > /proc/sys/net/ipv4/conf/all/proxy_arp
     echo 2 > /proc/sys/net/ipv4/conf/all/arp_announce
     echo 1 > /proc/sys/net/ipv6/conf/all/proxy_ndp
 
-### RP filter
+# RP filter
     sysctl -w "net.ipv4.conf.all.rp_filter=1"
-    
+
 [Cisco Press Reverse Path Filtering]:(http://www.ciscopress.com/articles/article.asp?p=1725270)
 
-### ICMP redirects
+# ICMP redirects
     sysctl -w net.ipv4.conf.all.accept_redirects=0
     sysctl -w net.ipv6.conf.all.accept_redirects=0
 
 [Cisco Press ICMP redirects]:(http://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13714-43.html)
 
-### sysctl
+# sysctl
 
-### ethtool
+# ethtool
 
-### bonding
+# bonding
     modprobe bonding
     echo bonding >> /etc/modules
 
@@ -52,10 +64,10 @@
             slaves eth0 eth1
             bond_mode active-backup
             bond_miimon 100
-            
+
     cat /proc/net/bonding/bond0
 
-### bridge
+# bridge
     auto vmbr100
     iface vmbr100 inet static
             address 192.168.200.101
@@ -66,7 +78,7 @@
             bridge_stp off
             bridge_fd 0
 
-### vlan & routing multiple interfaces
+# vlan & routing multiple interfaces
     echo 8021q >> /etc/modules
     modprobe 8021q
     auto eth0.100
@@ -84,7 +96,7 @@
 
 [See more]:(http://lartc.org/howto/)
 
-### routing
+# routing
     route add 192.168.200.151 dev vmbr0
     ip address show
     ip route show
