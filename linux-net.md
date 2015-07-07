@@ -1,8 +1,9 @@
 <!-- TOC depth:6 withLinks:1 updateOnSave:1 -->
+
 - [tcpdump](#tcpdump)
 - [iptables](#iptables)
-	- [SNAT/DNAT](#snatdnat)
-	- [IPv4 NAT](#ipv4-nat)
+  - [SNAT/DNAT](#snatdnat)
+  - [IPv4 NAT](#ipv4-nat)
 - [IP forwarding](#ip-forwarding)
 - [ARP Proxy](#arp-proxy)
 - [RP filter](#rp-filter)
@@ -13,8 +14,10 @@
 - [bridge](#bridge)
 - [vlan & routing multiple interfaces](#vlan-routing-multiple-interfaces)
 - [routing](#routing)
+
 <!-- /TOC -->
 ****************************************
+
 # tcpdump
     tcpdump -i any tcp port 80
     tcpdump -n -i any src net 1.1.2.0/24
@@ -70,13 +73,13 @@
 # bridge
     auto vmbr100
     iface vmbr100 inet static
-            address 192.168.200.101
-            netmask 255.255.255.0
-            gateway 192.168.200.1
-            #pointopoint 192.168.200.1
-            bridge_ports bond0
-            bridge_stp off
-            bridge_fd 0
+        address 192.168.200.101
+        netmask 255.255.255.0
+        gateway 192.168.200.1
+        #pointopoint 192.168.200.1
+        bridge_ports bond0
+        bridge_stp off
+        bridge_fd 0
 
 # vlan & routing multiple interfaces
     echo 8021q >> /etc/modules

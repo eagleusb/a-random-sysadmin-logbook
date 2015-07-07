@@ -1,9 +1,11 @@
 <!-- TOC depth:6 withLinks:1 updateOnSave:1 -->
+
 - [Classic R compilation](#classic-r-compilation)
 - [Revolution Analytics R fork](#revolution-analytics-r-fork)
 - [R functions](#r-functions)
 - [R addons](#r-addons)
 - [Rserve](#rserve)
+
 <!-- /TOC -->
 ****************************************
 

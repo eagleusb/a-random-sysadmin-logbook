@@ -1,4 +1,5 @@
 <!-- TOC depth:6 withLinks:1 updateOnSave:1 -->
+
 - [Kernel compilation](#kernel-compilation)
 	- [New way [1]](#new-way-1)
 - [SSHd Auth](#sshd-auth)
@@ -33,8 +34,10 @@
 - [yum](#yum)
 - [Ansible](#ansible)
 - [Update alternatives](#update-alternatives)
+
 <!-- /TOC -->
 ****************************************
+
 # Kernel compilation
 
 > necessary packages : build-essential libncurses5-dev

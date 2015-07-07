@@ -1,4 +1,5 @@
 <!-- TOC depth:6 withLinks:1 updateOnSave:1 -->
+
 - [PackStack packages](#packstack-packages)
 - [Glance API](#glance-api)
 - [Nova API](#nova-api)
@@ -13,6 +14,7 @@
 	- [Block Storage Architecture](#block-storage-architecture)
 - [Links](#links)
 	- [Libvirt](#libvirt)
+
 <!-- /TOC -->
 ****************************************
 
