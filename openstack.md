@@ -107,6 +107,9 @@ Block storage aka Cinder
 ***************
 
 # Links
+## OpenStack network
+[Latest Neutron networking concepts](http://docs.openstack.org/networking-guide/)
+[Network topology design](http://docs.openstack.org/openstack-ops/content/network_design.html#network_topology)
+[Neutron wiki](https://wiki.openstack.org/wiki/Neutron)
 ## Libvirt
-
 [The life of an OpenStack libvirt image](http://www.pixelbeat.org/docs/openstack_libvirt_images/)
