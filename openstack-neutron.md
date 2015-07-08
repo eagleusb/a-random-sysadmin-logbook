@@ -14,7 +14,7 @@ TypeDrivers maintain any needed type-specific network state, and perform provide
 - Local
 - VLAN
 - GRE
-- VxLan
+- VXLAN
 
 ## ML2 Mechanisms
 The MechanismDriver is responsible for taking the information established by the TypeDriver and ensuring that it is properly applied given the specific networking mechanisms that have been enabled
@@ -25,13 +25,16 @@ The MechanismDriver is responsible for taking the information established by the
 # L3 agent
     Neutron has an API extension to allow administrators and tenants to create "routers" that connect to L2 networks. Known as the "neutron-l3-agent", it uses the Linux IP stack and iptables to perform L3 forwarding and NAT. In order to support multiple routers with potentially overlapping IP addresses, neutron-l3-agent defaults to using Linux network namespaces to provide isolated forwarding contexts.
 
-# Neutron networking node services
+# Neutron networking node active services
 - ML2 plug-in
   - OpenVSwitch service,agent or Linux bridges (legacy)
 - L3 agent i.e. qrouter (iptables) with different namespaces per tenant/project
 - DHCP agent
 - Metadata agent
 
+**Note**
+
+VXLAN or GRE are technics used to encapsulate L2 traffic inside an L3 network to bypass VLAN limitations.
 ****
 
 *Networking node overview with legacy Linux br*
@@ -46,14 +49,166 @@ The MechanismDriver is responsible for taking the information established by the
 
 ****
 
-# Neutron controller node services
+# Neutron controller node active services
 - Neutron server service
 - ML2 plug-in
 
-# Neutron compute node services
+# Neutron compute node active services
 - ML2 plug-in
   - OpenVSwitch service,agent or Linux bridges (legacy)
 
+# Neutron setup
+
+## Neutron on **controller** node
+
+- Common options are into /etc/neutron/neutron.conf
+
+      [DEFAULT]
+      verbose = True
+      core_plugin = ml2
+      service_plugins = router
+      allow_overlapping_ips = True
+
+- The ML2 plug-in configuration resides into /etc/neutron/plugins/ml2/ml2_conf.ini
+
+      [ml2]
+      type_drivers = flat,vlan,gre,vxlan
+      tenant_network_types = vlan,gre,vxlan
+      mechanism_drivers = openvswitch,l2population
+
+      [ml2_type_flat]
+      flat_networks = external
+
+      [ml2_type_vlan]
+      network_vlan_ranges = external,vlan:MIN_VLAN_ID:MAX_VLAN_ID
+
+      [ml2_type_gre]
+      tunnel_id_ranges = MIN_GRE_ID:MAX_GRE_ID
+
+      [ml2_type_vxlan]
+      vni_ranges = MIN_VXLAN_ID:MAX_VXLAN_ID
+      vxlan_group = 239.1.1.1
+
+      [securitygroup]
+      firewall_driver = neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
+      enable_security_group = True
+      enable_ipset = True
+
+- Start the service
+
+      - Neutron Server
+
+**Note**
+
+The first value in the tenant_network_types option becomes the default project network type when a non-privileged user creates a network.
+The external value in the network_vlan_ranges option lacks VLAN ID ranges to support use of arbitrary VLAN IDs by privileged users.
+
+## Neutron **networking** node
+
+- As usual...
+
+      net.ipv4.ip_forward=1
+      net.ipv4.conf.default.rp_filter=0
+      net.ipv4.conf.all.rp_filter=0
+
+- Edit the ML2 plug-in configuration /etc/neutron/plugins/ml2/ml2_conf.ini
+
+      [ovs]
+      local_ip = TUNNEL_INTERFACE_IP_ADDRESS
+      enable_tunneling = True
+      bridge_mappings = vlan:br-vlan,external:br-ex
+
+      [agent]
+      l2_population = True
+      tunnel_types = gre,vxlan
+
+      [securitygroup]
+      firewall_driver = neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
+      enable_security_group = True
+      enable_ipset = True
+
+- Configure the L3 Agent here /etc/neutron/l3_agent.ini
+
+      [DEFAULT]
+      verbose = True
+      interface_driver = neutron.agent.linux.interface.OVSInterfaceDriver
+      use_namespaces = True
+      external_network_bridge =
+      router_delete_namespaces = True
+
+- Configure the DHCP Agent here /etc/neutron/dhcp_agent.ini
+
+      [DEFAULT]
+      verbose = True
+      interface_driver = neutron.agent.linux.interface.OVSInterfaceDriver
+      dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq
+      use_namespaces = True
+      dhcp_delete_namespaces = True
+
+- Configure the metadata agent here /etc/neutron/metadata_agent.ini
+
+      [DEFAULT]
+      verbose = True
+      nova_metadata_ip = controller
+      metadata_proxy_shared_secret = METADATA_SECRET
+
+- Optionally add Dnsmasq configuration file into /etc/neutron/dhcp_agent.ini
+
+      [DEFAULT]
+      dnsmasq_config_file = /etc/neutron/dnsmasq-neutron.conf
+
+
+- Edit dnsmasq-neutron.conf
+
+      dhcp-option-force=26,1450 [...]
+
+- Start services
+
+      - Open vSwitch
+      - Open vSwitch agent
+      - L3 agent
+      - DHCP agent
+      - Metadata agent
+
+## Neutron on **compute** node
+
+- As usual...
+
+      net.ipv4.conf.default.rp_filter=0
+      net.ipv4.conf.all.rp_filter=0
+      net.bridge.bridge-nf-call-iptables=1
+      net.bridge.bridge-nf-call-ip6tables=1
+
+- Edit the common config /etc/neutron/neutron.conf
+
+      [DEFAULT]
+      verbose = True
+
+- Edit the OpenvSwitch agent (ML2) configuration here /etc/neutron/plugins/ml2/ml2_conf.ini
+
+      [ovs]
+      local_ip = TUNNEL_INTERFACE_IP_ADDRESS
+      enable_tunneling = True
+      bridge_mappings = vlan:br-vlan
+
+      [agent]
+      l2_population = True
+      tunnel_types = gre,vxlan
+
+      [securitygroup]
+      firewall_driver = neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
+      enable_security_group = True
+      enable_ipset = True
+
+- Start services
+
+      - Open vSwitch
+      - Open vSwitch agent
+
+## Verify the setup
+
+- neutron agent-list
+- On the network node, verify creation of the qrouter and qdhcp namespaces with *ip netns*
 
 # Resources
 - http://fr.slideshare.net/danwent/openstack-quantum-intro-os-meetup-32612
