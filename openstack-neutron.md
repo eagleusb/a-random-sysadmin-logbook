@@ -22,6 +22,16 @@ The MechanismDriver is responsible for taking the information established by the
 - OpenVSwitch
 - Cisco Nexus...
 
+## Network type definitions
+
+    A **local** network is a network that can only be realized on a single host. This is only used in proof-of-concept or development environments, because just about any other OpenStack environment will have multiple compute hosts and/or a separate network host.
+
+    A **flat** network is a network that does not provide any segmentation options. A traditional L2 ethernet network is a "flat" network. Any servers attached to this network are able to see the same broadcast traffic and can contact each other without requiring a router. flat networks are often used to attach Nova servers to an existing L2 network (this is called a "provider network").
+
+    A **VLAN** network is one that uses VLANs for segmentation. When you create a new network in Neutron, it will be assigned a VLAN ID from the range you have configured in your Neutron configuration. Using vlan networks requires that any switches in your environment are configured to trunk the corresponding VLANs.
+
+    GRE and **VXLAN** networks are very similar. They are both "overylay" networks that work by encapsulating network traffic. Like vlan networks, each network you create receives a unique tunnel id. Unlike vlan networks, an overlay network does not require that you synchronize your OpenStack configuration with your L2 switch configuration.
+
 # L3 agent
     Neutron has an API extension to allow administrators and tenants to create "routers" that connect to L2 networks. Known as the "neutron-l3-agent", it uses the Linux IP stack and iptables to perform L3 forwarding and NAT. In order to support multiple routers with potentially overlapping IP addresses, neutron-l3-agent defaults to using Linux network namespaces to provide isolated forwarding contexts.
 
