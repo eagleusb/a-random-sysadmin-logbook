@@ -67,7 +67,7 @@ VXLAN or GRE are technics used to encapsulate L2 traffic inside an L3 network to
 - ML2 plug-in
   - OpenVSwitch service,agent or Linux bridges (legacy)
 
-# Neutron setup
+# Neutron setup without HA
 
 ## Neutron on **controller** node
 
@@ -283,6 +283,10 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
 
 - neutron agent-list
 - On the network node, verify creation of the qrouter and qdhcp namespaces with *ip netns*
+
+# Neutron setup with HA
+
+# Neutron performance enhancements
 
 # Resources
 - http://fr.slideshare.net/danwent/openstack-quantum-intro-os-meetup-32612
