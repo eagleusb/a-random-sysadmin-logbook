@@ -2,8 +2,10 @@
 
 # ML2 (Modular Layer 2)
 
+## How ML2 is designed
 ![Neutron ML2 architecture](http://aqorn.com/wp-content/uploads/2014/11/ml2-arch1.png)
 
+### Description
     It currently works with the existing openvswitch, linuxbridge, and hyperv L2 agents, and is intended to replace and deprecate the monolithic plugins associated with those L2 agents. The ml2 framework is also intended to greatly simplify adding support for new L2 networking technologies, requiring much less initial and ongoing effort than would be required to add a new monolithic core plugin.
 
 ## ML2 Type drivers
@@ -30,8 +32,19 @@ The MechanismDriver is responsible for taking the information established by the
 - DHCP agent
 - Metadata agent
 
+****
+
+*Networking node overview with legacy Linux br*
+
 ![Networking node overview with legacy Linux br](http://docs.openstack.org/networking-guide/_images/scenario-legacy-lb-network1.png)
+
+****
+
+*Networking node overview with new OpenVSwitch*
+
 ![Networking node overview with new OpenVSwitch](http://docs.openstack.org/networking-guide/_images/scenario-legacy-ovs-network1.png)
+
+****
 
 # Neutron controller node services
 - Neutron server service
@@ -43,10 +56,10 @@ The MechanismDriver is responsible for taking the information established by the
 
 
 # Resources
-http://fr.slideshare.net/danwent/openstack-quantum-intro-os-meetup-32612
-http://docs.openstack.org/networking-guide/deploy.html
-http://docs.openstack.org/networking-guide/config_ml2_plug_in.html
-http://docs.openstack.org/admin-guide-cloud/content/tenant-provider-networks.html
-http://docs.openstack.org/networking-guide/migration_nova_network_to_neutron.html
-https://developer.rackspace.com/blog/neutron-networking-l3-agent/
-https://duckduckgo.com/?q=site%3Adeveloper.rackspace.com%2Fblog+neutron&t=ffsb
+- http://fr.slideshare.net/danwent/openstack-quantum-intro-os-meetup-32612
+- http://docs.openstack.org/networking-guide/deploy.html
+- http://docs.openstack.org/networking-guide/config_ml2_plug_in.html
+- http://docs.openstack.org/admin-guide-cloud/content/tenant-provider-networks.html
+- http://docs.openstack.org/networking-guide/migration_nova_network_to_neutron.html
+- https://developer.rackspace.com/blog/neutron-networking-l3-agent/
+- https://duckduckgo.com/?q=site%3Adeveloper.rackspace.com%2Fblog+neutron&t=ffsb
