@@ -71,6 +71,8 @@ VXLAN or GRE are technics used to encapsulate L2 traffic inside an L3 network to
 
 - The ML2 plug-in configuration resides into /etc/neutron/plugins/ml2/ml2_conf.ini
 
+**Legacy OpenvSwitch**
+
       [ml2]
       type_drivers = flat,vlan,gre,vxlan
       tenant_network_types = vlan,gre,vxlan
@@ -94,6 +96,28 @@ VXLAN or GRE are technics used to encapsulate L2 traffic inside an L3 network to
       enable_security_group = True
       enable_ipset = True
 
+**Legacy Linux br**
+
+      [ml2]
+      type_drivers = flat,vlan,vxlan
+      tenant_network_types = vlan,vxlan
+      mechanism_drivers = linuxbridge,l2population
+
+      [ml2_type_flat]
+      flat_networks = external
+
+      [ml2_type_vlan]
+      network_vlan_ranges = external,vlan:MIN_VLAN_ID:MAX_VLAN_ID
+
+      [ml2_type_vxlan]
+      vni_ranges = MIN_VXLAN_ID:MAX_VXLAN_ID
+      vxlan_group = 239.1.1.1
+
+      [securitygroup]
+      firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+      enable_security_group = True
+      enable_ipset = True
+
 - Start the service
 
       - Neutron Server
@@ -113,6 +137,8 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
 
 - Edit the ML2 plug-in configuration /etc/neutron/plugins/ml2/ml2_conf.ini
 
+**Legacy OpenvSwitch**
+
       [ovs]
       local_ip = TUNNEL_INTERFACE_IP_ADDRESS
       enable_tunneling = True
@@ -127,7 +153,24 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
       enable_security_group = True
       enable_ipset = True
 
+**Legacy Linux br**
+
+      [securitygroup]
+      firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+      enable_security_group = True
+      enable_ipset = True
+
+      [linux_bridge]
+      physical_interface_mappings = vlan:PROJECT_VLAN_INTERFACE,external:EXTERNAL_INTERFACE
+
+      [vxlan]
+      enable_vxlan = True
+      local_ip = TUNNEL_INTERFACE_IP_ADDRESS
+      l2_population = True
+
 - Configure the L3 Agent here /etc/neutron/l3_agent.ini
+
+**Legacy OpenvSwitch**
 
       [DEFAULT]
       verbose = True
@@ -136,7 +179,18 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
       external_network_bridge =
       router_delete_namespaces = True
 
+**Legacy Linux br**
+
+      [DEFAULT]
+      verbose = True
+      interface_driver = neutron.agent.linux.interface.BridgeInterfaceDriver
+      use_namespaces = True
+      external_network_bridge =
+      router_delete_namespaces = True
+
 - Configure the DHCP Agent here /etc/neutron/dhcp_agent.ini
+
+**Legacy OpenvSwitch**
 
       [DEFAULT]
       verbose = True
@@ -144,6 +198,16 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
       dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq
       use_namespaces = True
       dhcp_delete_namespaces = True
+
+**Legacy Linux br**
+
+      [DEFAULT]
+      verbose = True
+      interface_driver = neutron.agent.linux.interface.BridgeInterfaceDriver
+      dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq
+      use_namespaces = True
+      dhcp_delete_namespaces = True
+
 
 - Configure the metadata agent here /etc/neutron/metadata_agent.ini
 
