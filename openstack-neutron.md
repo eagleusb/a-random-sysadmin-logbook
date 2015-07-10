@@ -1,5 +1,5 @@
 **Table of content**
-<!-- TOC depth:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+<!-- TOC depth:6 withLinks:1 updateOnSave:0 orderedList:0 -->
 
 - [Neutron](#neutron)
 - [ML2 (Modular Layer 2)](#ml2-modular-layer-2)
@@ -20,6 +20,7 @@
 - [Neutron setup with HA](#neutron-setup-with-ha)
 - [Neutron performance enhancements](#neutron-performance-enhancements)
 - [Resources](#resources)
+
 <!-- /TOC -->
 
 # Neutron
@@ -279,11 +280,21 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
 
 *Start services*
 
+**Legacy OpenvSwitch**
+
       Open vSwitch
       Open vSwitch agent
       L3 agent
       DHCP agent
       Metadata agent
+
+**Legacy Linux br**
+
+      Linux bridge agent
+      L3 agent
+      DHCP agent
+      Metadata agent
+
 
 ## Neutron on **compute** node
 
@@ -303,6 +314,8 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
 
 *Edit the OpenvSwitch agent (ML2) configuration here /etc/neutron/plugins/ml2/ml2_conf.ini*
 
+**Legacy OpenvSwitch**
+
       [ovs]
       local_ip = TUNNEL_INTERFACE_IP_ADDRESS
       enable_tunneling = True
@@ -317,12 +330,33 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
       enable_security_group = True
       enable_ipset = True
 
+**Legacy Linux br**
+
+      [securitygroup]
+      firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+      enable_security_group = True
+      enable_ipset = True
+
+      [linux_bridge]
+      physical_interface_mappings = vlan:PROJECT_VLAN_INTERFACE
+
+      [vxlan]
+      enable_vxlan = True
+      local_ip = TUNNEL_INTERFACE_IP_ADDRESS
+      l2_population = True
+
 ***
 
 *Start services*
 
+**Legacy OpenvSwitch**
+
       Open vSwitch
       Open vSwitch agent
+
+**Legacy Linux br**
+
+      Linux bridge agent
 
 ## Verify the setup
 
