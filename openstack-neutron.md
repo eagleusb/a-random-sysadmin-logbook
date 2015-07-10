@@ -23,17 +23,16 @@ The MechanismDriver is responsible for taking the information established by the
 - Cisco Nexus...
 
 ## Network type definitions
-
 A **local** network is a network that can only be realized on a single host. This is only used in proof-of-concept or development environments, because just about any other OpenStack environment will have multiple compute hosts and/or a separate network host.
 
 A **flat** network is a network that does not provide any segmentation options. A traditional L2 ethernet network is a "flat" network. Any servers attached to this network are able to see the same broadcast traffic and can contact each other without requiring a router. flat networks are often used to attach Nova servers to an existing L2 network (this is called a "provider network").
 
 A **VLAN** network is one that uses VLANs for segmentation. When you create a new network in Neutron, it will be assigned a VLAN ID from the range you have configured in your Neutron configuration. Using vlan networks requires that any switches in your environment are configured to trunk the corresponding VLANs.
 
-GRE and **VXLAN** networks are very similar. They are both "overylay" networks that work by encapsulating network traffic. Like vlan networks, each network you create receives a unique tunnel id. Unlike vlan networks, an overlay network does not require that you synchronize your OpenStack configuration with your L2 switch configuration.
+**GRE and VXLAN** networks are very similar. They are both "overylay" networks that work by encapsulating network traffic. Like vlan networks, each network you create receives a unique tunnel id. Unlike vlan networks, an overlay network does not require that you synchronize your OpenStack configuration with your L2 switch configuration.
 
 # L3 agent
-    Neutron has an API extension to allow administrators and tenants to create "routers" that connect to L2 networks. Known as the "neutron-l3-agent", it uses the Linux IP stack and iptables to perform L3 forwarding and NAT. In order to support multiple routers with potentially overlapping IP addresses, neutron-l3-agent defaults to using Linux network namespaces to provide isolated forwarding contexts.
+Neutron has an API extension to allow administrators and tenants to create "routers" that connect to L2 networks. Known as the "neutron-l3-agent", it uses the Linux IP stack and iptables to perform L3 forwarding and NAT. In order to support multiple routers with potentially overlapping IP addresses, neutron-l3-agent defaults to using Linux network namespaces to provide isolated forwarding contexts.
 
 # Neutron networking node active services
 - ML2 plug-in
@@ -44,7 +43,7 @@ GRE and **VXLAN** networks are very similar. They are both "overylay" networks t
 
 **Note**
 
-VXLAN or GRE are technics used to encapsulate L2 traffic inside an L3 network to bypass VLAN limitations.
+VXLAN or GRE are technics used to encapsulate L2 traffic inside an L3 network to bypass VLAN limitations between the compute(s) and the networking node(s).
 ****
 
 *Networking node overview with legacy Linux br*
@@ -56,6 +55,12 @@ VXLAN or GRE are technics used to encapsulate L2 traffic inside an L3 network to
 *Networking node overview with new OpenVSwitch*
 
 ![Networking node overview with new OpenVSwitch](http://docs.openstack.org/networking-guide/_images/scenario-legacy-ovs-network1.png)
+
+****
+
+*Networking node overview with new OpenVSwitch and GRE encapsulation*
+
+![Networking node overview with new OpenVSwitch and GRE](http://docs.openstack.org/kilo/install-guide/install/yum/content/figures/3/a/common/figures/installguide-neutron-initialnetworks.png)
 
 ****
 
@@ -71,7 +76,7 @@ VXLAN or GRE are technics used to encapsulate L2 traffic inside an L3 network to
 
 ## Neutron on **controller** node
 
-- Common options are into /etc/neutron/neutron.conf
+*Common options are into /etc/neutron/neutron.conf*
 
       [DEFAULT]
       verbose = True
@@ -79,7 +84,9 @@ VXLAN or GRE are technics used to encapsulate L2 traffic inside an L3 network to
       service_plugins = router
       allow_overlapping_ips = True
 
-- The ML2 plug-in configuration resides into /etc/neutron/plugins/ml2/ml2_conf.ini
+***
+
+*The ML2 plug-in configuration resides into /etc/neutron/plugins/ml2/ml2_conf.ini*
 
 **Legacy OpenvSwitch**
 
@@ -128,9 +135,11 @@ VXLAN or GRE are technics used to encapsulate L2 traffic inside an L3 network to
       enable_security_group = True
       enable_ipset = True
 
-- Start the service
+***
 
-      - Neutron Server
+*Start the service*
+
+      Neutron Server
 
 **Note**
 
@@ -139,13 +148,15 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
 
 ## Neutron **networking** node
 
-- As usual
+*As usual*
 
       net.ipv4.ip_forward=1
       net.ipv4.conf.default.rp_filter=0
       net.ipv4.conf.all.rp_filter=0
 
-- Edit the ML2 plug-in configuration /etc/neutron/plugins/ml2/ml2_conf.ini
+***
+
+*Edit the ML2 plug-in configuration /etc/neutron/plugins/ml2/ml2_conf.ini*
 
 **Legacy OpenvSwitch**
 
@@ -178,7 +189,9 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
       local_ip = TUNNEL_INTERFACE_IP_ADDRESS
       l2_population = True
 
-- Configure the L3 Agent here /etc/neutron/l3_agent.ini
+***
+
+*Configure the L3 Agent here /etc/neutron/l3_agent.ini*
 
 **Legacy OpenvSwitch**
 
@@ -198,7 +211,9 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
       external_network_bridge =
       router_delete_namespaces = True
 
-- Configure the DHCP Agent here /etc/neutron/dhcp_agent.ini
+***
+
+*Configure the DHCP Agent here /etc/neutron/dhcp_agent.ini*
 
 **Legacy OpenvSwitch**
 
@@ -218,47 +233,51 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
       use_namespaces = True
       dhcp_delete_namespaces = True
 
+***
 
-- Configure the metadata agent here /etc/neutron/metadata_agent.ini
+*Configure the metadata agent here /etc/neutron/metadata_agent.ini*
 
       [DEFAULT]
       verbose = True
       nova_metadata_ip = controller
       metadata_proxy_shared_secret = METADATA_SECRET
 
-- Optionally add Dnsmasq configuration file into /etc/neutron/dhcp_agent.ini
+*Optionally add DNSmasq configuration file into /etc/neutron/dhcp_agent.ini*
 
       [DEFAULT]
       dnsmasq_config_file = /etc/neutron/dnsmasq-neutron.conf
 
-
-- Edit dnsmasq-neutron.conf
+      *Edit dnsmasq-neutron.conf*
 
       dhcp-option-force=26,1450 [...]
 
-- Start services
+***
 
-      - Open vSwitch
-      - Open vSwitch agent
-      - L3 agent
-      - DHCP agent
-      - Metadata agent
+*Start services*
+
+      Open vSwitch
+      Open vSwitch agent
+      L3 agent
+      DHCP agent
+      Metadata agent
 
 ## Neutron on **compute** node
 
-- As usual
+*As usual*
 
       net.ipv4.conf.default.rp_filter=0
       net.ipv4.conf.all.rp_filter=0
       net.bridge.bridge-nf-call-iptables=1
       net.bridge.bridge-nf-call-ip6tables=1
 
-- Edit the common config /etc/neutron/neutron.conf
+*Edit the common config /etc/neutron/neutron.conf*
 
       [DEFAULT]
       verbose = True
 
-- Edit the OpenvSwitch agent (ML2) configuration here /etc/neutron/plugins/ml2/ml2_conf.ini
+***
+
+*Edit the OpenvSwitch agent (ML2) configuration here /etc/neutron/plugins/ml2/ml2_conf.ini*
 
       [ovs]
       local_ip = TUNNEL_INTERFACE_IP_ADDRESS
@@ -274,10 +293,12 @@ The external value in the network_vlan_ranges option lacks VLAN ID ranges to sup
       enable_security_group = True
       enable_ipset = True
 
-- Start services
+***
 
-      - Open vSwitch
-      - Open vSwitch agent
+*Start services*
+
+      Open vSwitch
+      Open vSwitch agent
 
 ## Verify the setup
 
