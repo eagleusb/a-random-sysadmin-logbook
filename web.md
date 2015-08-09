@@ -25,8 +25,17 @@
     useradd -c "etherpad env user" -m -s /bin/false etherpad
     chown etherpad:etherpad etherpad-lite -R
     git checkout 1.5.6
-    sudo npm install sqlite3
+    sudo npm install --production --unsafe-perm sqlite3
     screen -dS etherpad "sudo -u etherpad etherpad-lite/bin/run.sh"
 
 
 [See More](https://github.com/ether/etherpad-lite#gnulinux-and-other-unix-like-systems)
+
+# Ghost deployment
+## ARMv6/RaspberryPi
+    screen -AmdS ghost
+    curl -L https://ghost.org/zip/ghost-latest.zip -o ghost.zip
+    unzip -u ghost.zip
+    npm install --production --verbose
+    useradd -c "ghost user env" -M -s /bin/false ghost && chown -R ghost:ghost $PWD
+    sudo -u ghost npm start --production --verbose
