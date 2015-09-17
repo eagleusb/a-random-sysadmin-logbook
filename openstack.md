@@ -60,9 +60,19 @@
 	virsh version
 	for i in *-*-*-*-*/disk;do qemu-img info $i | grep "backing file" >> used-images.log;done;
 	for i in /instances/_base/*;do if [[ $(grep -c "$i" /instances/used-images.log) == 0 ]];then echo "$i is unused" ;fi;done;
+## Nova migrate
+	qemu-img convertion
+	rsync --sparse --compress /instances/01b2f270-f62c-47ea-ba0f-a38f83a0fa57_resize/disk_rbase IP_DST:/instances/01b2f270-f62c-47ea-ba0f-a38f83a0fa57/disk
+	\_ ssh IP_DST rsync --server -Sze.Lsf . /instances/01b2f270-f62c-47ea-ba0f-a38f83a0fa57/disk
 
 # Under the hood of Cinder node
-
+## SQL DB ops
+	show databases;
+	use cinder;
+	select * from volumes where id='93d405ac-83cc-45e5-bccf-ba792c36156d';
+	select id,instance_uuid,host,status,attach_status,attached_host,migration_status from volumes where display_name like 'lad-test%';
+	update volumes SET migration_status = NULL WHERE id = '93d405ac-83cc-45e5-bccf-ba792c36156d';
+	update instances set host='compute-hostname.domain',node='compute-hostname.domain' where uuid='vm_uuid' and project_id='project_uuid';
 
 # Under the hood of Glance node
 		ls -lcth /images/
