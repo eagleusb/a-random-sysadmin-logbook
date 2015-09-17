@@ -168,6 +168,7 @@
 	systemctl disable servicename
 	systemctl reload servicename
 	systemctl start servicename
+	systemctl --state=failed --no-pager list-units
 
 # NetworkManager
 	systemctl stop NetworkManager
