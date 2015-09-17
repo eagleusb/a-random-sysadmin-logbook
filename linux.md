@@ -127,8 +127,7 @@
 	hdparm -tT /dev/sda
 
 # OpenSSL
-	./config --prefix=/topsecureapp/lel --openssldir=/topsecureapp/lel/openssl
-	./config zlib --prefix=/topsecureapp/lel --openssldir=/topsecureapp/lel/openssl
+	./config --prefix=/topsecureapp/lel --openssldir=/topsecureapp/lel/openssl [zlib/no-zlib/no-asm]
 	make && make test && make install
 
 ## RSA
