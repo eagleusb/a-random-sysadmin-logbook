@@ -67,12 +67,12 @@
 
 # Under the hood of Cinder node
 ## SQL DB ops
-	show databases;
-	use cinder;
-	select * from volumes where id='93d405ac-83cc-45e5-bccf-ba792c36156d';
-	select id,instance_uuid,host,status,attach_status,attached_host,migration_status from volumes where display_name like 'lad-test%';
-	update volumes SET migration_status = NULL WHERE id = '93d405ac-83cc-45e5-bccf-ba792c36156d';
-	update instances set host='compute-hostname.domain',node='compute-hostname.domain' where uuid='vm_uuid' and project_id='project_uuid';
+	SHOW databases;
+	USE cinder;
+	SELECT * FROM volumes where id='93d405ac-83cc-45e5-bccf-ba792c36156d';
+	SELECT id,instance_uuid,host,status,attach_status,attached_host,migration_status FROM volumes where display_name like 'lad-test%';
+	UPDATE volumes SET deleted=1,migration_status=NULL,deleted_at='2015-10-02 10:39:00',status='deleted' WHERE id='ecd9ccf8-3c70-48dd-82c5-de076c57cfa0';
+	UPDATE instances SET host='compute-hostname.domain',node='compute-hostname.domain' WHERE uuid='vm_uuid' and project_id='project_uuid';
 
 # Under the hood of Glance node
 		ls -lcth /images/
