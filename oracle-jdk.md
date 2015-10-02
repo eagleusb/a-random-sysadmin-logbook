@@ -1,10 +1,15 @@
-## Table of contents
+# Table of contents
 
 
 
 ****************************************
 
-### Oracle JDK
+# Oracle JDK
+## RaspberryPi B+ deployment
+    Download Oracle JDK for ARM here http://www.oracle.com/technetwork/java/javase/downloads/jdk8-arm-downloads-2187472.html
+    tar xzvf jdk-8u51-linux-arm-vfp-hflt.tar.gz -C /mnt/usbdrive02/opt/jvm/
+    update-alternatives --install /usr/bin/java{c} java{c} /mnt/usbdrive02/opt/jvm/jdk1.8.0_51/bin/java{c} 1
+
 #### Configuration print
     java -XX:+PrintFlagsFinal -version
 
