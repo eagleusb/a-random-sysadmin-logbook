@@ -73,6 +73,12 @@
 	SELECT id,instance_uuid,host,status,attach_status,attached_host,migration_status FROM volumes where display_name like 'lad-test%';
 	UPDATE volumes SET deleted=1,migration_status=NULL,deleted_at='2015-10-02 10:39:00',status='deleted' WHERE id='ecd9ccf8-3c70-48dd-82c5-de076c57cfa0';
 	UPDATE instances SET host='compute-hostname.domain',node='compute-hostname.domain' WHERE uuid='vm_uuid' and project_id='project_uuid';
+## iSCSI
+	iscsiadm -m discovery -t sendtargets -p cindernodeIP
+	iscsiadm -m node -T iqn.2010-10.org.openstack:volume-5d51f748-aec8-4da7-a3d2-1083afb720b6 -l
+	iscsiadm -m session
+	targetcli ls
+	tgt-admin -s or tgtadm --lld iscsi --op show --mode target
 
 # Under the hood of Glance node
 		ls -lcth /images/
