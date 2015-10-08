@@ -71,14 +71,23 @@
 	USE cinder;
 	SELECT * FROM volumes where id='93d405ac-83cc-45e5-bccf-ba792c36156d';
 	SELECT id,instance_uuid,host,status,attach_status,attached_host,migration_status FROM volumes where display_name like 'lad-test%';
+	SELECT id,display_name FROM volumes WHERE provider_location LIKE '1.1.1.3%' AND deleted=0 limit 50;
 	UPDATE volumes SET deleted=1,migration_status=NULL,deleted_at='2015-10-02 10:39:00',status='deleted' WHERE id='ecd9ccf8-3c70-48dd-82c5-de076c57cfa0';
+	UPDATE volumes SET migration_status=NULL,provider_location=NULL,provider_auth=NULL,migration_status=NULL,mountpoint=NULL,instance_uuid=NULL,attach_status='detached' WHERE deleted=1 and provider_location LIKE '1.1.1.3%' and migration_status LIKE 'target%';
 	UPDATE instances SET host='compute-hostname.domain',node='compute-hostname.domain' WHERE uuid='vm_uuid' and project_id='project_uuid';
+	DELETE FROM block_device_mapping WHERE volume_id='72164152-51ea-4d12-a863-e19189171ffd';
 ## iSCSI
 	iscsiadm -m discovery -t sendtargets -p cindernodeIP
+	iscsiadm -m discoverydb -P1
+	iscsiadm -m discoverydb -t sendtargets -p cindernodeIP --discover
+	iscsiadm -m discoverydb -t sendtargets -p cindernodeIP -o new -o delete --discover
 	iscsiadm -m node -T iqn.2010-10.org.openstack:volume-5d51f748-aec8-4da7-a3d2-1083afb720b6 -l
-	iscsiadm -m session
+	iscsiadm -m node -T iqn.2005-03.com.max -p cindernodeIP:3260 -u
+	iscsiadm -m session [ -r sessionid ]
+	systemctl stop iscsi && ls -al /var/lib/iscsi/nodes/ && ls -alR /var/lib/iscsi/send_targets
 	targetcli ls
 	tgt-admin -s or tgtadm --lld iscsi --op show --mode target
+	[iscsiadm man]:http://www.open-iscsi.org/docs/README
 
 # Under the hood of Glance node
 		ls -lcth /images/
