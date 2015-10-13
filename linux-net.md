@@ -105,3 +105,8 @@
     ip route show
     ip rule ls
     ip link
+
+# NetworkManager
+    nmcli cond mod "System em1"  ipv4.addresses "" ipv4.gateway "" ipv4.dns "" ipv4.dns-search "" ipv4.method auto connection.autoconnect no && \
+    nmcli con mod p6p1 ipv4.addresses 1.5.1.1/21 ipv4.gateway 1.5.1.100 ipv4.dns "1.5.1.104 1.5.1.191" ipv4.dns-search toto.lan ipv4.method manual && \
+    nmcli device disconnect em1 && nmcli connection up p6p1
