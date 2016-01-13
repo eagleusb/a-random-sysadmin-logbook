@@ -30,6 +30,7 @@
 ## IPv4 NAT
     echo 1 > /proc/sys/net/ipv4/ip_forward
     iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+    iptables -A PREROUTING -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 8080
     iptables -t nat -L -n -v
 
 # IP forwarding
