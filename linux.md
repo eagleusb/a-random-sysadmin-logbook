@@ -211,6 +211,7 @@
 
 # Kernel cmdline updates via grubby
   grubby --default-kernel
+  grubby --set-default=/boot/vmlinuz-3.10.0-327.13.1.el7.x86_64
   grubby --update-kernel=/boot/vmlinuz-3.10.0-327.4.4.el7.x86_64 --args=noapic
   grubby --update-kernel=/boot/vmlinuz-3.10.0-327.4.4.el7.x86_64 --remove-args=noapic
   grubby --info=/boot/vmlinuz-3.10.0-327.4.4.el7.x86_64

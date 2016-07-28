@@ -19,10 +19,13 @@
 ****************************************
 
 # tcpdump
-    tcpdump -i any tcp port 80
-    tcpdump -n -i any src net 1.1.2.0/24
+    tcpdump -vni any ip and tcp port 80
+    tcpdump -ni any src net 1.1.2.0/24
     tcpdump -i any host 1.2.1.2
-    tcpdump -i any -n host 8.8.8.8 and tcp port 80
+    tcpdump -ni any host 8.8.8.8 and tcp port 80
+
+# Ethernet offloading
+    ethtool -K eth0 rx off tx off tso off lro off gro off gso off
 
 # iptables
 ##SNAT/DNAT
